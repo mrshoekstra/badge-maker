@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Badge Configurator</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+<h1>Badge Configurator</h1>
+<div class="settings">
+	<label>
+	  Upload Image:
+	  <input type="file" id="imageInput" accept="image/*">
+	</label>
+	<label>
+	  <!--
+	  Import JSON:
+	  <input type="file" id="jsonInput" accept="application/json">
+	  -->
+	</label>
+	<label>
+	  Badge Color:
+	  <input type="color" id="badgeHueInput" value="#006f8c">
+	</label>
+	<label>
+	  Icon Color:
+	  <input type="color" id="iconHueInput">
+	</label>
+	<label>
+	  Icon Style:
+	  <select id="iconStyleInput">
+		<option value="number">Number</option>
+		<option value="circle">Circle</option>
+	  </select>
+	</label>
+	<label>
+	  Icon Number:
+	  <input type="number" id="iconNumberInput" min="1" max="99" step="1">
+	</label>
+	<label>
+	  Text Top:
+	  <input type="text" id="textTopInput" maxlength="50">
+	</label>
+	<label>
+	  Text Bottom:
+	  <input type="text" id="textBottomInput" maxlength="50">
+	</label>
+</div>
+<div class="center space-start">
+	<canvas width="400" height="400"></canvas>
+</div>
+<div class="space-start">
+	<!--
+	<button id="saveJson" disabled>Save JSON</button>
+	-->
+	<button id="exportPng" disabled>Export PNG</button>
+</div>
+<div class="tooltip">!</div>

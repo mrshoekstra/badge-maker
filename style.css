@@ -1,0 +1,110 @@
+:root {
+	--gap: 2rem;
+}
+
+* {
+	box-sizing:border-box;
+}
+
+body {
+	background: linear-gradient(90deg, #ccc, #eee 10%, #eee 90%, #ccc);
+	font-family: sans-serif;
+	justify-items: center;
+	margin: 0 auto;
+	padding: 1rem;
+	width: 50rem;
+	
+	&:has(:user-invalid) {
+		
+		:user-invalid {
+			box-shadow: 0 0 0.5rem #f00;
+			anchor-name: --tooltip;
+		}
+		
+		.tooltip {
+			display: block;
+			font-size: 2rem;
+			text-shadow: 0 0 0.5em #fff;
+		}
+	}
+}
+
+h1 {
+	color: white;
+	font-size: 3rem;
+	margin-block: 4rem;
+	text-align: center;
+	text-shadow: 0 0 2px black, 0 0.1rem 0.2rem black, 0 -0.5rem 0.5rem red, 0 -0.5rem 0.5rem orange, 0 -0.5rem 0.5rem yellow, 0 0.5rem 2rem black;
+}
+
+button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+a[download] {
+	display: none;
+}
+
+.settings {
+	display: grid;
+	gap: var(--gap);
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.center {
+	text-align: center;
+}
+
+.space-start {
+	margin-block-start: var(--gap);
+}
+
+.tooltip {
+	align-content: center;
+	color: #f00;
+	display: none;
+	font-weight: 700;
+	inset: anchor(--tooltip start) anchor(--tooltip end) anchor(--tooltip end) calc(anchor(--tooltip end) + 1rem);
+	justify-items: center;
+	position: absolute;
+}
+
+label {
+	display: block;
+	padding-inline: 1rem;
+	
+	input:where([type=color], [type=file], [type=number], [type=text]),
+	select {
+			background: rgb(255 255 255 / 0.5);
+			border: 0.0625rem solid #ccc;
+			border-radius: 5rem;
+			color: inherit;
+			display: block;
+			font: inherit;
+			inline-size: 16rem;
+			margin-block: 0.25rem;
+			margin-inline: -1rem;
+			padding: 0.75rem 1rem;
+	}
+
+	select,
+	::picker(select) {
+		appearance: base-select;
+	}
+
+	input:where([type=number]),
+	select {
+		text-align: end;
+	}
+
+	input[type=color] {
+		--blockSize: 6rem;
+		--inlineSize: 26.625rem;
+		block-size: var(--blockSize);
+		clip-path:  polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%, 20% 20%);
+		inline-size: var(--inlineSize);
+		margin-block: calc(0.25rem - var(--blockSize) * 0.2);
+		margin-inline: calc(-1rem + var(--inlineSize) * -0.2);
+	}
+}
