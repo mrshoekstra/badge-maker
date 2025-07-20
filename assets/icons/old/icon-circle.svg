@@ -1,0 +1,14 @@
+<svg id="icon-circle" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<style>
+			@import url('icon-styles.css');
+		</style>
+		<mask id="mask">
+			<circle/>
+			<circle/>
+			<circle/>
+			<circle/>
+		</mask>
+	</defs>
+	<circle mask="url(#mask)"/>
+</svg>

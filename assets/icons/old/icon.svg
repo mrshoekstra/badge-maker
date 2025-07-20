@@ -1,0 +1,58 @@
+<svg style='--shape: "hexagon"' viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<style>
+			svg {
+				--center-size-fraction: 3;    /* line-size fraction */
+				--line-count: 3;                /* excluding center */
+			}
+
+			rect {
+				height: 1px;
+				width: 1px;
+			}
+
+			use {
+				--center-size: calc(var(--center-size-fraction) * var(--line-size));
+				--line-size: calc(1 / (2 * var(--line-count) + var(--center-size-fraction)));
+				scale: var(--size, 1);
+				transform-origin: 50%;
+			}
+
+			use:nth-child(odd) {
+				fill: #fff
+			}
+
+			use:nth-child(2) {
+				--size: calc(var(--center-size) + var(--line-size) * 4);
+			}
+
+			use:nth-child(3) {
+				--size: calc(var(--center-size) + var(--line-size) * 2);
+			}
+
+			use:nth-child(4) {
+				--size: var(--center-size);
+			}
+
+			#shape * {
+				display: if(
+					style(--shape: attr(data-shape)): block;
+					else: none;
+				);
+			}
+		</style>
+		<g id="shape">
+			<circle data-shape="circle" cx="0.5" cy="0.5" r="0.5"/>
+			<polygon data-shape="diamond" points="0.5 0 1 0.5 0.5 1 0 0.5"/>
+			<polygon data-shape="hexagon" points="1 0.5 0.75 0.9330127018922194 0.25 0.9330127018922194 0 0.5 0.25 0.0669872981077808 0.75 0.0669872981077808"/>
+			<rect dats-shape="square"/>
+		</g>
+		<mask id="mask">
+			<use href="#shape"/>
+			<use href="#shape"/>
+			<use href="#shape"/>
+			<use href="#shape"/>
+		</mask>
+	</defs>
+	<use href="#shape" mask="url(#mask)"/>
+</svg>

@@ -1,0 +1,15 @@
+<svg id="icon-hexagon" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<style>
+			@import url('icon-styles.css');
+		</style>
+		<polygon id="hexagon" points="1 0.5 0.75 0.9330127018922194 0.25 0.9330127018922194 0 0.5 0.25 0.0669872981077808 0.75 0.0669872981077808"/>
+		<mask id="mask">
+			<use href="#hexagon"/>
+			<use href="#hexagon"/>
+			<use href="#hexagon"/>
+			<use href="#hexagon"/>
+		</mask>
+	</defs>
+	<use href="#hexagon" mask="url(#mask)"/>
+</svg>

@@ -1,0 +1,44 @@
+svg {
+	--center-size-fraction: 3;    /* line-size fraction */
+	--line-count: 3;                /* excluding center */
+}
+
+mask > * {
+	--center-size: calc(var(--center-size-fraction) * var(--line-size));
+	--line-size: calc(1 / (2 * var(--line-count) + var(--center-size-fraction)));
+}
+
+mask :nth-child(odd) {
+	fill: #fff
+}
+
+mask :nth-child(2) {
+	--size: calc(var(--center-size) + var(--line-size) * 4);
+}
+
+mask :nth-child(3) {
+	--size: calc(var(--center-size) + var(--line-size) * 2);
+}
+
+mask :nth-child(4) {
+	--size: var(--center-size);
+}
+
+#icon-circle circle {
+	cx: 0.5;
+	cy: 0.5;
+	r: calc(var(--size, 1) / 2);
+}
+
+:where(#icon-diamond, #icon-hexagon) use {
+	scale: var(--size, 1);
+	transform-origin: 50%;
+}
+
+#icon-square rect {
+	--position: calc(0.5 - var(--size) / 2);
+	block-size: calc(var(--size, 1) * 1px);
+	inline-size: calc(var(--size, 1) * 1px);
+	x: var(--position, 0);
+	y: var(--position, 0);
+}
