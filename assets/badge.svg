@@ -1,153 +1,186 @@
 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
-  <defs>
-    <style>
-      @import url(https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap);
+	<defs>
+		<style>
+			@import url(https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap);
 
-      svg {
-        --clrDark: #323c46;
-        --clrLight: #f4f4f4;
-        --clrBadge: oklch(0.5 0.1 var(--clrBadgeHue, 222));
-        --clrBadgeHue: {{ badgeHue }};
-        --clrIcon: if(
-          style(--clrIconHue): oklch(
-            if(
-              style(--iconStyle: 'number'): 0.9;
-              else: 0.65;
-            )
-            0.1
-            var(--clrIconHue, 88)
-          );
-          else: var(--clrLight);
-        );
-        --clrIconHue: {{ iconHue }};
-        --clrStar: gold;
-        --iconStyle: '{{ iconStyle }}';
-        --stars: false;
+			svg {
+				--clrDark: #323c46;
+				--clrLight: #f4f4f4;
+				--clrBadge: oklch(0.5 0.1 var(--clrBadgeHue, 222));
+				--clrBadgeHue: {{ badgeHue }};
+				--clrIcon: if(
+					style(--clrIconHue): oklch(
+						if(
+							style(--iconStyle: number): 0.9;
+							else: 0.65;
+						)
+						0.1
+						var(--clrIconHue, 88)
+					);
+					else: var(--clrLight);
+				);
+				--clrIconHue: {{ iconHue }};
+				--clrStar: gold;
+				--iconStyle: {{ iconStyle }};
+				--stars: false;
 
-        color: var(--clrBadge);
-        dominant-baseline: central;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 11pt;
-        letter-spacing: 0.05em;
-        text-anchor: middle;
-      }
-        circle:not([cx]) {
-          cx: 50%;
-        }
+				color: var(--clrBadge);
+				dominant-baseline: central;
+				font-family: 'DM Sans', sans-serif;
+				font-size: 11pt;
+				letter-spacing: 0.05em;
+				text-anchor: middle;
+			}
 
-        circle:not([cy]) {
-          cy: 50%;
-        }
+			circle:not([cx]) {
+				cx: 50%;
+			}
 
-        circle:not([r]) {
-          r: 50%;
-        }
+			circle:not([cy]) {
+				cy: 50%;
+			}
 
-        image,
-        rect:not([height]) {
-          height: 100%;
-        }
+			circle:not([r]) {
+				r: 50%;
+			}
 
-        image,
-        rect:not([width]) {
-          width: 100%;
-        }
+			image,
+			rect:not([height]) {
+				height: 100%;
+			}
 
-        image,
-        rect:not([x]) {
-          x: 0;
-        }
+			image,
+			rect:not([width]) {
+				width: 100%;
+			}
 
-        image,
-        rect:not([y]) {
-          y: 0;
-        }
+			image,
+			rect:not([x]) {
+				x: 0;
+			}
 
-        textPath {
-          fill: var(--clrLight);
-          font-weight: 700;
-        }
+			image,
+			rect:not([y]) {
+				y: 0;
+			}
 
-        textPath[href="#text-top"] {
-          text-transform: uppercase;
-        }
+			textPath {
+				fill: var(--clrLight);
+				font-weight: 700;
+			}
 
-        textPath[href="#text-bottom"] {
-          fill: if(
-            style(--stars: true): url(#stars);
-            else: var(--clrLight);
-          );
-        }
+			textPath[href="#text-top"] {
+				text-transform: uppercase;
+			}
 
-        #stars stop:nth-child(1),
-        #stars stop:nth-child(4) {
-          stop-color: var(--clrStar);
-        }
+			textPath[href="#text-bottom"] {
+				fill: if(
+					style(--stars: true): url(#stars);
+					else: var(--clrLight);
+				);
+			}
 
-        #stars stop:nth-child(2),
-        #stars stop:nth-child(3) {
-          stop-color: var(--clrLight);
-        }
-    </style>
-    <mask id="mask-color-shadow">
-      <circle fill="#fff" r="88"/>
-      <rect height="50%"/>
-      <circle cx="28" fill="#fff" r="16"/>
-      <circle cx="172" fill="#fff" r="16"/>
-      <circle r="56"/>
-    </mask>
-    <svg height="104" href="#image" id="image" viewBox="0 0 100 100" width="104" x="48" y="48">
-      <defs>
-        <mask id="mask-image">
-          <circle fill="#fff"/>
-        </mask>
-      </defs>
-      <g mask="url(#mask-image)">
-        <rect fill="var(--clrDark)"/>
-        <image preserveAspectRatio="xMinYMin slice" href="{{ image }}"/>
-      </g>
-    </svg>
-    <mask id="mask-image-shadow">
-      <circle fill="#fff" r="52"/>
-      <circle cy="108" r="52"/>
-    </mask>
-    <path d="M 31 80 C 52.5 10.75 147.5 10.75 169 80" id="text-top"/>
-    <path d="M 31 120 C 52.5 189.25 147.5 189.25 169 120" id="text-bottom"/>
-    <linearGradient id="stars">
-      <stop offset="30%"/>
-      <stop offset="30%"/>
-      <stop offset="70%"/>
-      <stop offset="70%"/>
-    </linearGradient>
-    <svg height="20" id="icon-number" viewBox="0 0 100 100" width="20">
-      <circle fill="var(--clrIcon, var(--clrLight))"/>
-      <text style="font-size: 40pt" text-anchor="middle" x="50" y="50">{{ iconNumber }}</text>
-    </svg>
-    <svg height="20" id="icon-circle" viewBox="0 0 100 100" width="20">
-      <defs>
-        <mask id="mask-icon-circle">
-          <circle fill="#fff"/>
-          <circle r="calc(50 / 8.5 * 6.5)"/>
-          <circle fill="#fff" r="calc(50% / 8.5 * 4.5)"/>
-          <circle r="calc(50 / 8.5 * 2.5)"/>
-        </mask>
-      </defs>
-      <circle fill="var(--clrIcon, var(--clrLight))" mask="url(#mask-icon-circle)"/>
-    </svg>
-  </defs>
-  <circle fill="var(--clrDark)"/>
-  <circle fill="var(--clrLight)" r="92"/>
-  <circle fill="currentColor" id="circle-color" r="88"/>
-  <circle fill="var(--clrDark)" fill-opacity="0.5" mask="url(#mask-color-shadow)" r="88"/>
-  <circle fill="var(--clrLight)" r="56"/>
-  <use href="#image"/>
-  <circle fill="var(--clrDark)" fill-opacity="0.5" mask="url(#mask-image-shadow)"/>
-  <use x="18" y="90" href="#icon-{{ iconStyle }}"/>
-  <use x="162" y="90" href="#icon-{{ iconStyle }}"/>
-  <text>
-    <textPath startOffset="50%" href="#text-top">{{ textTop }}</textPath>
-  </text>
-  <text>
-    <textPath startOffset="50%" href="#text-bottom">{{ textBottom }}</textPath>
-  </text>
+			#stars stop:nth-child(1),
+			#stars stop:nth-child(4) {
+				stop-color: var(--clrStar);
+			}
+
+			#stars stop:nth-child(2),
+			#stars stop:nth-child(3) {
+				stop-color: var(--clrLight);
+			}
+		</style>
+		<mask id="mask-color-shadow">
+			<circle fill="#fff" r="88"/>
+			<rect height="50%"/>
+			<circle cx="28" fill="#fff" r="16"/>
+			<circle cx="172" fill="#fff" r="16"/>
+			<circle r="56"/>
+		</mask>
+		<svg height="104" href="#image" id="image" viewBox="0 0 100 100" width="104" x="48" y="48">
+			<defs>
+				<mask id="mask-image">
+					<circle fill="#fff"/>
+				</mask>
+			</defs>
+			<g mask="url(#mask-image)">
+			<rect fill="var(--clrDark)"/>
+			<image preserveAspectRatio="xMinYMin slice" href="{{ image }}"/>
+			</g>
+		</svg>
+		<mask id="mask-image-shadow">
+			<circle fill="#fff" r="52"/>
+			<circle cy="108" r="52"/>
+		</mask>
+		<path d="M 31 80 C 52.5 10.75 147.5 10.75 169 80" id="text-top"/>
+		<path d="M 31 120 C 52.5 189.25 147.5 189.25 169 120" id="text-bottom"/>
+		<linearGradient id="stars">
+			<stop offset="30%"/>
+			<stop offset="30%"/>
+			<stop offset="70%"/>
+			<stop offset="70%"/>
+		</linearGradient>
+		<svg height="20" id="icon" viewBox="0 0 1 1" width="20">
+			<defs>
+				<style>
+					<![CDATA[
+						mask use {
+							--center-size-scale: 3;
+							--center-size: calc(var(--center-size-scale) * var(--line-size));
+							--line-size: calc(1 / (2 * 3 + var(--center-size-scale)));
+							--size: calc(var(--center-size) + var(--line-size) * attr(data-size type(<integer>)));
+							scale: var(--size, 1);
+							transform-origin: 50%;
+						}
+
+						#shape {
+							mask: if(
+								style(--iconStyle: number): none;
+								else: url(#mask);
+							);
+						}
+
+						#shape > * {
+							display: if(
+								style(--iconStyle: attr(data-shape type(<custom-ident>))): block;
+								else: none;
+							);
+						}
+					]]>
+				</style>
+				<g id="shape">
+					<g data-shape="number">
+						<circle cx="0.5" cy="0.5" data-shape="circle" r="0.5"/>
+						<text fill="var(--clrDark)" style="font-size: 0.4pt; letter-spacing: 0.0005em" text-anchor="middle" x="0.5" y="0.5">{{ iconNumber }}</text>
+					</g>
+					<circle cx="0.5" cy="0.5" data-shape="circle" r="0.5"/>
+					<polygon data-shape="diamond" points="0.5,0 1,0.5 0.5,1 0,0.5"/>
+					<polygon data-shape="hexagon" points="1,0.5 0.75,0.9330127018922194 0.25,0.9330127018922194 0,0.5 0.25,0.0669872981077808 0.75,0.0669872981077808"/>
+					<rect data-shape="square" height="1" width="1"/>
+				</g>
+				<mask id="mask">
+					<use fill="#fff" href="#shape"/>
+					<use data-size="4" href="#shape"/>
+					<use data-size="2" fill="#fff" href="#shape"/>
+					<use data-size="0" href="#shape"/>
+				</mask>
+			</defs>
+			<use fill="var(--clrIcon, var(--clrLight))" href="#shape"/>
+		</svg>
+	</defs>
+	<circle fill="var(--clrDark)"/>
+	<circle fill="var(--clrLight)" r="92"/>
+	<circle fill="currentColor" id="circle-color" r="88"/>
+	<circle fill="var(--clrDark)" fill-opacity="0.5" mask="url(#mask-color-shadow)" r="88"/>
+	<circle fill="var(--clrLight)" r="56"/>
+	<use href="#image"/>
+	<circle fill="var(--clrDark)" fill-opacity="0.5" mask="url(#mask-image-shadow)"/>
+	<use x="18" y="90" href="#icon"/>
+	<use x="162" y="90" href="#icon"/>
+	<text>
+		<textPath startOffset="50%" href="#text-top">{{ textTop }}</textPath>
+	</text>
+	<text>
+		<textPath startOffset="50%" href="#text-bottom">{{ textBottom }}</textPath>
+	</text>
 </svg>
