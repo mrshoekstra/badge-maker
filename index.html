@@ -1,59 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <title>Badge Configurator</title>
 <link rel="stylesheet" href="style.css">
-<script src="script.js" defer></script>
-<h1>Badge Configurator</h1>
-<div class="settings">
-	<label>
-		Upload Image:
-		<input type="file" id="imageInput" accept="image/*">
-	</label>
-	<label>
-		<!--
-		Import JSON:
-		<input type="file" id="jsonInput" accept="application/json">
-		-->
-	</label>
-	<label>
-		Badge Color:
-		<input type="color" id="badgeHueInput" value="#006f8c">
-	</label>
-	<label>
-		Icon Color:
-		<input type="color" id="iconHueInput">
-	</label>
-	<label>
-		Icon Style:
-		<select id="iconStyleInput">
-			<option value="number">Number</option>
-			<option value="circle">Circle</option>
-			<option value="diamond">Diamond</option>
-			<option value="hexagon">Hexagon</option>
-			<option value="square">Square</option>
-		</select>
-	</label>
-	<label>
-		Icon Number:
-		<input type="number" id="iconNumberInput" min="1" max="99" step="1">
-	</label>
-	<label>
-		Text Top:
-		<input type="text" id="textTopInput" maxlength="50">
-	</label>
-	<label>
-		Text Bottom:
-		<input type="text" id="textBottomInput" maxlength="50">
-	</label>
-</div>
-<div class="center space-start">
-	<canvas width="400" height="400"></canvas>
-</div>
-<div class="space-start">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;family=Libre+Barcode+128&amp;display=swap">
+<script defer src="script.js" type="module"></script>
+<badge-maker>
+	<header>
+		<h1>Badge Maker</h1>
+		<nav>
+			<ul>
+				<li>
+					<img alt="Marc Hoekstra" src="https://avatars.githubusercontent.com/u/7147845" title="Created by Marc Hoekstra">
+					<!--
+					<ul>
+						<li>LinkedIn</li>
+						<li>GitHub</li>
+					</ul>
+					-->
+				</li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<hgroup>
+			<h2>Badge Image Configuration</h2>
+			<p>Create and customize your reward badges</p>
+		</hgroup>
+		<settings-category>
+			<h3>Text</h3>
+			<label>
+				Top:
+				<input type="text" id="textTopInput" maxlength="50">
+			</label>
+			<label>
+				Bottom:
+				<input type="text" id="textBottomInput" maxlength="50">
+			</label>
+		</settings-category>
+		<settings-category>
+			<h3>Icon</h3>
+			<label>
+				Style:
+				<select id="iconStyleInput">
+					<option value="number">Number</option>
+					<option value="circle">Circle</option>
+					<option value="diamond">Diamond</option>
+					<option value="hexagon">Hexagon</option>
+					<option value="square">Square</option>
+				</select>
+			</label>
+			<label>
+				Number:
+				<input type="number" id="iconNumberInput" min="1" max="99" step="1">
+			</label>
+		</settings-category>
+		<settings-category>
+			<h3>Color</h3>
+			<label>
+				Badge:
+				<input type="color" id="badgeHueInput" value="#006f8c">
+			</label>
+			<label>
+				Icon:
+				<input type="color" id="iconHueInput">
+			</label>
+		</settings-category>
+		<settings-category>
+			<h3>Image</h3>
+			<label>
+				Upload Center Image:
+				<drop-zone status="select">
+					<input type="file" id="imageInput" accept="image/*">
+					<file-status type="select">
+						<p><mark>Upload a file</mark> or drag and drop</p>
+						<p>PNG, JPG, GIF up to 10MB</p>
+					</file-status>
+					<file-status type="wrong">
+						<p class="file-name-after">Can't parse file: </p>
+						<p><mark>Upload a different file</mark></p>
+					</file-status>
+					<file-status type="load">
+						<p>Loading file: <mark class="file-name-after"></mark></p>
+						<p><progress value="0"></progress></p>
+					</file-status>
+					<file-status type="success">
+						<p>Upload successfull</p>
+					</file-status>
+					<file-status type="error">
+						<p class="file-name-after">Error loading file: </p>
+						<p><mark>Upload a different file</mark></p>
+					</file-status>
+				</drop-zone>
+			</label>
+			<!--
+			<label>
+				Import JSON:
+				<input type="file" id="jsonInput" accept="application/json">
+			</label>
+			-->
+		</settings-category>
+	</main>
+	<aside>
+		<div class="sticky">
+			<h3>Live Preview</h3>
+			<canvas width="800" height="800"></canvas>
+			<div>
+				<!--
+				<button id="saveJson" disabled>Save JSON</button>
+				-->
+				<button id="exportPng">Export PNG</button>
+			</div>
+		</div>
+	</aside>
 	<!--
-	<button id="saveJson" disabled>Save JSON</button>
+	<tool-tip>!</tool-tip>
 	-->
-	<button id="exportPng" disabled>Export PNG</button>
-</div>
-<div class="tooltip">!</div>
+</badge-maker>
