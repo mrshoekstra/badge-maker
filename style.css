@@ -31,7 +31,7 @@ body {
 	justify-items: center;
 	margin: 0;
 	overflow-x: clip;
-;
+
 	&:has(:user-invalid) {
 
 		:user-invalid {
@@ -175,6 +175,12 @@ badge-maker {
 				0 3rem 6rem rgb(from var(--clrFront) r g b / 0.25);
 			inline-size: min(100%, max(12.5rem, 50cqb));
 			justify-self: center;
+			opacity: 0;
+			transition: opacity ease 1s;
+
+			&[data-visible] {
+				opacity: 1;
+			}
 		}
 	}
 
@@ -209,38 +215,67 @@ badge-maker {
 
 	drop-zone {
 		--status: attr(status type(<custom-ident>));
-		border: dashed 0.15rem var(--clrFront);
+		border: 0.15rem dashed var(--clrFront);
 		border-radius: 2rem;
 		color: light-dark(#95acc9, #85909d);
 		cursor: pointer;
+		display: grid;
+		grid-template-areas: 'drop-zone';
 		padding: 3rem;
 		text-align: center;
-		transition: ease-out .5s;
+		transition: ease-out .25s;
+		transition-property: background, border;
 
-		&[drag-over=true] {
-			transition: ease-out .5s;
-			border: solid var(--clrAccent);
-			transition-property: background, border;
+		&:where([drag-over=true]) {
 			background: oklch(from var(--clrAccent) calc(l / 2) calc(c / 4) h);
+			border-color: var(--clrAccent);
+			border-style: solid;
+		}
 
-			* {
-				pointer-events: none;
-			}
-
-			input {
-				display: none;
-			}
+		* {
+			pointer-events: none;
 		}
 
 		file-status {
+			--statusEqType-OR-initialLoad: if(
+				style(--status: var(--type)) or (style(--status: init) and style(--type: select)): true;
+				else: false;
+			);
 			--type: attr(type type(<custom-ident>));
 			display: if(
-				style(--status: var(--type)): grid;
+				style(--statusEqType-OR-initialLoad: true): grid;
 				else: none;
 			);
+			grid-area: drop-zone;
 			justify-content: center;
+			opacity: if(
+				style(--statusEqType-OR-initialLoad: true): 1;
+				else: 0;
+			);
+			transition: if(
+				style(--status: select): 1s ease-out;
+				else: 0.1s ease;
+			) allow-discrete;
+			transition-property: display, opacity, translate;
+			translate: 0 if(
+				style(--statusEqType-OR-initialLoad: true): 0;
+				else: -1rem;
+			);
 
-			.file-name-after:after {
+			@starting-style {
+				translate: if(
+					style(--status: var(--type)): 0 1rem;
+					else: 0;
+				);
+			}
+
+			p {
+				overflow-x: hidden;
+				text-overflow: ellipsis;
+				text-wrap: nowrap;
+			}
+
+			.file-name-suffix:after {
 				content: attr(file-name);
 			}
 		}
@@ -268,17 +303,16 @@ badge-maker {
 
 button {
 	--color: light-dark(var(--clrBack), var(--clrFront));
-    background: var(--clrAccent);
-    border: none;
-    border-radius: 0.75rem;
+	background: var(--clrAccent);
+	border: none;
+	border-radius: 0.75rem;
 	transition: box-shadow 0.5s ease-out;
-    color: var(--color);
+	color: var(--color);
 	contain: content;
 	cursor: pointer;
 	font: inherit;
 	padding: 0.8lh 1.2lh;
 	position: relative;
-
 
 	&:where(:active, :disabled) {
 		background: oklch(from var(--clrAccent) calc(l / 1.5) calc(c / 1.5) h);
@@ -308,7 +342,6 @@ button {
 			background: oklch(from var(--clrAccent) calc(l / 1.1) c h);
 			box-shadow: 0 0 4rem rgb(from var(--clrFront) r g b / --light-dark(0.25, 0.5));
 
-
 			&::before {
 				inline-size: 110%;
 				transition: 0.5s ease;
@@ -327,7 +360,11 @@ tool-tip {
 	color: #f00;
 	display: none;
 	font-weight: 700;
-	inset: anchor(--tooltip start) anchor(--tooltip end) anchor(--tooltip end) calc(anchor(--tooltip end) + 1rem);
+	inset:
+		anchor(--tooltip start)
+		anchor(--tooltip end)
+		anchor(--tooltip end)
+		calc(anchor(--tooltip end) + 1rem);
 	justify-items: center;
 	position: absolute;
 }

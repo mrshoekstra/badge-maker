@@ -8,8 +8,11 @@ const iconNumberInput = document.getElementById('iconNumberInput');
 const iconHueInput = document.getElementById('iconHueInput');
 const textTopInput = document.getElementById('textTopInput');
 const textBottomInput = document.getElementById('textBottomInput');
+const dropZoneInput = document.querySelector('drop-zone');
 const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
+const canvasContext = canvas.getContext('2d');
+const exportCanvas = document.createElement('canvas');
+const exportCanvasContext = exportCanvas.getContext('2d');
 //const saveJsonButton = document.getElementById('saveJson');
 const exportPngButton = document.getElementById('exportPng');
 const defaultValue = {
@@ -38,34 +41,39 @@ function loadTemplate() {
 	})
 	.then(data => {
 		svgTemplate = data;
-		updatePreview();
+		updateCanvas();
 	})
 	.catch(error => {
 		console.error(error);
 	});
 }
 
-function download() {
-	// File name
+function getFileName() {
 	const icon = iconStyleInput[iconStyleInput.selectedIndex].text + (
 		iconStyle === 'number'
 			? ` ${iconNumber}`
 			: ''
 	);
-	const separator = textTop.trim() !== '' && textBottom.trim() !== ''
-		? ' - '
-		: '';
-	const fileName = `${textTop}${separator}${textBottom} (${icon}).png`
-	let dataUrl = canvas.toDataURL('image/png');
-	dataUrl = dataUrl.replace(
-		/^data:image\/[^;]*/,
-		`data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=${fileName}.png`,
-	);
-	// Download
-	let link = document.createElement('a');
+	const fileName = `${textTop} - ${textBottom} (${icon}).png`;
+	return fileName;
+}
+
+async function getExportDataUrl(size) {
+	exportCanvas.height = size;
+	exportCanvas.width = size;
+	await updateCanvas(exportCanvasContext);
+	const dataUrl = exportCanvas.toDataURL('image/png');
+	return dataUrl;
+}
+
+async function download() {
+	const fileName = getFileName();
+	const dataUrl = await getExportDataUrl(200);
+	const link = document.createElement('a');
 	link.download = fileName;
 	link.href = dataUrl;
 	link.click();
+	link.remove();
 }
 
 function hexToOklchHue(hex) {
@@ -87,119 +95,127 @@ function hexToOklchHue(hex) {
 	return h < 0 ? h + 360 : h;
 }
 
-function updatePreview() {
-	badgeHue = hexToOklchHue(badgeHueInput.value) || defaultValue.badgeHue;
-	iconStyle = iconStyleInput.value || defaultValue.iconStyle;
-	iconNumber = (
-		iconNumberInput.value > 0 && iconNumberInput.value < 100
-			? iconNumberInput.value
-			: defaultValue.iconNumber
-		) || iconNumberInput.value;
-	iconHue = hexToOklchHue(iconHueInput.value) || defaultValue.iconHue;
-	textTop = (textTopInput.value || defaultValue.textTop).toUpperCase();
-	textBottom = textBottomInput.value || defaultValue.textBottom;
-	if (!svgTemplate) return;
-	const values = {
-		image,
-		badgeHue,
-		iconStyle,
-		iconNumber,
-		iconHue,
-		textTop,
-		textBottom,
-	};
-	const svg = parseSVG(svgTemplate, values);
-	const svgBlob = new Blob([svg], { type: 'image/svg+xml' });
-	const url = URL.createObjectURL(svgBlob);
-	const img = new Image();
-	img.onload = () => {
-		const imgName = imageInput.value.split('\\').pop();
-		console.info({fileName: imgName});
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-		URL.revokeObjectURL(url);
-	};
-	img.src = url;
+function updateCanvas(context) {
+	return new Promise((resolve) => {
+		const thisContext = context instanceof CanvasRenderingContext2D
+			? context
+			: canvasContext;
+		const thisCanvas = thisContext.canvas;
+		badgeHue = hexToOklchHue(badgeHueInput.value) || defaultValue.badgeHue;
+		iconStyle = iconStyleInput.value || defaultValue.iconStyle;
+		iconNumber = (
+			iconNumberInput.value > 0 && iconNumberInput.value < 100
+				? iconNumberInput.value
+				: defaultValue.iconNumber
+			) || iconNumberInput.value;
+		iconHue = hexToOklchHue(iconHueInput.value) || defaultValue.iconHue;
+		textTop = (textTopInput.value || defaultValue.textTop).toUpperCase();
+		textBottom = textBottomInput.value || defaultValue.textBottom;
+		if (!svgTemplate) return;
+		const svgVars = {
+			image,
+			badgeHue,
+			iconStyle,
+			iconNumber,
+			iconHue,
+			textTop,
+			textBottom,
+		};
+		const svg = parseSvgVars(svgTemplate, svgVars);
+		const svgBlob = new Blob([svg], { type: 'image/svg+xml' });
+		const url = URL.createObjectURL(svgBlob);
+		const tempImage = new Image();
+		tempImage.onload = () => {
+			thisContext.clearRect(0, 0, thisCanvas.width, thisCanvas.height);
+			thisContext.drawImage(tempImage, 0, 0, thisCanvas.width, thisCanvas.height);
+			URL.revokeObjectURL(url);
+			if (thisContext === canvasContext && !canvas.dataset.visible) {
+				requestAnimationFrame(() => {
+					canvas.dataset.visible = true;
+				});
+			}
+			if (dropZone.getStatus() !== 'init') {
+				dropZone.setStatus('success');
+				dropZone.setStatus('select', 3000);
+			}
+			resolve();
+		};
+		tempImage.src = url;
+	});
 }
 
-function parseSVG(template, values) {
+function parseSvgVars(template, values) {
 	return template.replace(
 		/\{\{\s*([a-z]+([A-Z][a-z]*)*)\s*\}\}/g,
 		(_, key) => values[key.trim()] || ''
 	);
 }
 
-function setDefaultValues(event) {
+function setDefaultValues() {
 	iconNumberInput.value = defaultValue.iconNumber;
 	textTopInput.setAttribute('placeholder', defaultValue.textTop);
 	textBottomInput.setAttribute('placeholder', defaultValue.textBottom);
 }
 
-const dropZoneInput = document.querySelector('drop-zone');
-const dropZone = new DropZone(dropZoneInput);
-dropZoneInput.addEventListener('drop', event => {
-	dropZone.drop(event)
-		.then(file => {
-			setImage(file);
-		})
+function checkFile(file) {
+	Promise.resolve()
+		.then(() => initDropZone(file))
+		.then(() => checkFileType(file))
+		.then(() => readFile(file))
 		.catch(error => {
 			console.error(error.message);
+			dropZone.setStatus(error.status || 'error');
+			dropZone.setStatus('select', 3000);
 		});
-});
-exportPngButton.addEventListener('click', download, false);
-imageInput.addEventListener('change', () => {
-	const file = imageInput.files[0];
-	if (!file) return;
-	setImage(file)
-});
-badgeHueInput.addEventListener('input', updatePreview);
-iconStyleInput.addEventListener('change', updatePreview);
-iconNumberInput.addEventListener('input', updatePreview);
-iconHueInput.addEventListener('input', updatePreview);
-textTopInput.addEventListener('input', updatePreview);
-textBottomInput.addEventListener('input', updatePreview);
+}
 
-function setImage(file) {
-	const isImage = file.type.startsWith('image/');
-	dropZoneInput.querySelectorAll('.file-name-after').forEach(element => element.setAttribute('file-name', file.name));
-	dropZoneInput.querySelector('progress').setAttribute('value', 0);
-	if (!isImage) {
-		dropZoneInput.setAttribute('status', 'wrong');
+function initDropZone(file) {
+	dropZoneInput.querySelectorAll('.file-name-suffix').forEach(
+		element => element.setAttribute('file-name', file.name)
+	);
+	dropZoneInput.querySelector('[type="load"] progress').value = 0;
+}
+
+function checkFileType(file) {
+	if (!file.type.startsWith('image/')) {
+		dropZone.setStatus('wrong');
+		dropZone.setStatus('select', 3000);
+		return Promise.reject({
+			status: 'wrong',
+			message: 'Wrong file type',
+		});
 	}
+}
+
+function readFile(file) {
 	const reader = new FileReader();
 	reader.onloadstart = () => {
-		dropZoneInput.setAttribute('status', 'load');
+		dropZone.setStatus('load');
 	};
 	reader.onprogress = event => {
-		console.log(event.loaded, event.total, event.loaded / event.total);
-		dropZoneInput.querySelector('progress').setAttribute('value', event.loaded / event.total);
+		dropZoneInput.querySelector('[type="load"] progress').value = event.loaded / event.total;
 	};
 	reader.onload = event => {
-		dropZoneInput.setAttribute('status', 'success');
+		dropZone.setStatus('parse');
 		image = event.target.result;
-		updatePreview();
-//		saveJsonButton.disabled = false;
-		exportPngButton.disabled = false;
+		updateCanvas();
 	};
 	reader.readAsDataURL(file);
 }
 
-setDefaultValues();
-loadTemplate();
-/*
+const dropZone = new DropZone(dropZoneInput, checkFile);
 imageInput.addEventListener('change', () => {
 	const file = imageInput.files[0];
 	if (!file) return;
-	const reader = new FileReader();
-	reader.onload = event => {
-		image = event.target.result;
-		updatePreview();
-//    saveJsonButton.disabled = false;
-		exportPngButton.disabled = false;
-	};
-	reader.readAsDataURL(file);
+	checkFile(file);
 });
+exportPngButton.addEventListener('click', download);
+badgeHueInput.addEventListener('input', updateCanvas);
+iconStyleInput.addEventListener('change', updateCanvas);
+iconNumberInput.addEventListener('input', updateCanvas);
+iconHueInput.addEventListener('input', updateCanvas);
+textTopInput.addEventListener('input', updateCanvas);
+textBottomInput.addEventListener('input', updateCanvas);
 
-
-file.type.startsWith('image/')
-*/
+setDefaultValues();
+loadTemplate();

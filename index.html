@@ -73,26 +73,31 @@
 			<h3>Image</h3>
 			<label>
 				Upload Center Image:
-				<drop-zone status="select">
+				<drop-zone status="init">
 					<input type="file" id="imageInput" accept="image/*">
 					<file-status type="select">
 						<p><mark>Upload a file</mark> or drag and drop</p>
 						<p>PNG, JPG, GIF up to 10MB</p>
 					</file-status>
 					<file-status type="wrong">
-						<p class="file-name-after">Can't parse file: </p>
-						<p><mark>Upload a different file</mark></p>
+						<p class="file-name-suffix">Can't parse file: </p>
+						<p><mark>Try a different file</mark></p>
+					</file-status>
+					<file-status type="parse">
+						<p>Parsing file: <mark class="file-name-suffix"></mark></p>
+						<p><progress></progress></p>
 					</file-status>
 					<file-status type="load">
-						<p>Loading file: <mark class="file-name-after"></mark></p>
+						<p>Loading file: <mark class="file-name-suffix"></mark></p>
 						<p><progress value="0"></progress></p>
 					</file-status>
 					<file-status type="success">
-						<p>Upload successfull</p>
+						<p><mark>Upload successfull</mark></p>
+						<p class="file-name-suffix">File: </p>
 					</file-status>
 					<file-status type="error">
-						<p class="file-name-after">Error loading file: </p>
-						<p><mark>Upload a different file</mark></p>
+						<p class="file-name-suffix">Error loading file: </p>
+						<p><mark>Try a different file</mark></p>
 					</file-status>
 				</drop-zone>
 			</label>
