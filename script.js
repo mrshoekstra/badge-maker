@@ -95,9 +95,10 @@ function hexToOklchHue(hex) {
 	return h < 0 ? h + 360 : h;
 }
 
-function updateCanvas(context) {
+function updateCanvas(settings) {
 	return new Promise((resolve) => {
-		const thisContext = context instanceof CanvasRenderingContext2D
+		const thisUpdateImage = settings?.updateImage || false;
+		const thisContext = settings?.context instanceof CanvasRenderingContext2D
 			? context
 			: canvasContext;
 		const thisCanvas = thisContext.canvas;
@@ -134,7 +135,7 @@ function updateCanvas(context) {
 					canvas.dataset.visible = true;
 				});
 			}
-			if (dropZone.getStatus() !== 'init') {
+			if (thisUpdateImage && dropZone.getStatus() !== 'init') {
 				dropZone.setStatus('success');
 				dropZone.setStatus('select', 3000);
 			}
@@ -198,7 +199,7 @@ function readFile(file) {
 	reader.onload = event => {
 		dropZone.setStatus('parse');
 		image = event.target.result;
-		updateCanvas();
+		updateCanvas({ updateImage: true });
 	};
 	reader.readAsDataURL(file);
 }
