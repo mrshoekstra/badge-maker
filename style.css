@@ -213,15 +213,129 @@ badge-maker {
 		font-size: 1.5rem;
 	}
 
+	button,
+	drop-zone,
+	input,
+	select {
+		outline-offset: 0.5rem;
+
+		&:focus {
+			outline: none;
+		}
+
+		&:focus-visible,
+		&:has(input[type=file]:focus-visible) {
+			outline: 0.125rem solid var(--clrFront);
+		}
+	}
+
+	label {
+		display: grid;
+		font-weight: 600;
+		gap: 1rem;
+
+		input:where([type=color], [type=number], [type=text]),
+		select {
+			background: light-dark(#e7ecf3, #444955);
+			border: none;
+			border-radius: 0.5rem;
+			color: light-dark(#4d6c94, #c9cfd7);
+			display: block;
+			font: inherit;
+			font-weight: 400;
+			padding: 1lh;
+
+			&::placeholder {
+				color: light-dark(#909fc3, #848a93);
+			}
+		}
+
+		select,
+		::picker(select) {
+			appearance: base-select;
+		}
+
+		input:where([type=number]),
+		select {
+			text-align: end;
+		}
+
+		input[type=color] {
+			--blockSize: 6rem;
+			--inlineSize: 26.625rem;
+			block-size: var(--blockSize);
+			clip-path:  polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%, 20% 20%);
+			inline-size: var(--inlineSize);
+			margin-block: calc(0.25rem - var(--blockSize) * 0.2);
+			margin-inline: calc(-1rem + var(--inlineSize) * -0.2);
+		}
+	}
+
+	button {
+		--color: light-dark(var(--clrBack), var(--clrFront));
+		background: var(--clrAccent);
+		border: none;
+		border-radius: 0.75rem;
+		transition: box-shadow 0.5s ease-out;
+		color: var(--color);
+		contain: content;
+		cursor: pointer;
+		font: inherit;
+		padding: 0.8lh 1.2lh;
+		position: relative;
+
+		&:where(:active, :disabled) {
+			background: oklch(from var(--clrAccent) calc(l / 1.5) calc(c / 1.5) h);
+			color: oklch(from var(--color) calc(l / 1.25) calc(c / 1.25) h);
+
+			&:disabled {
+				cursor: not-allowed;
+			}
+		}
+
+		&:not(:active, :disabled) {
+
+			&::before {
+				align-self: center;
+				aspect-ratio: 1;
+				background: radial-gradient(circle, var(--clrAccent));
+				border-radius: 50%;
+				content: '';
+				inline-size: 0;
+				inset: -100%;
+				justify-self: center;
+				position: absolute;
+				z-index: -1;
+			}
+
+			&:hover {
+				background: oklch(from var(--clrAccent) calc(l / 1.1) c h);
+				box-shadow: 0 0 4rem rgb(from var(--clrFront) r g b / --light-dark(0.25, 0.5));
+
+				&::before {
+					inline-size: 110%;
+					transition: 0.5s ease;
+					transition-timing-function: cubic-bezier(0.1, 0.1, 0.1, 1);
+
+					@starting-style {
+						inline-size: 0;
+					}
+				}
+			}
+		}
+	}
+
 	drop-zone {
 		--status: attr(status type(<custom-ident>));
 		border: 0.15rem dashed var(--clrFront);
 		border-radius: 2rem;
 		color: light-dark(#95acc9, #85909d);
+		contain: content;
 		cursor: pointer;
 		display: grid;
 		grid-template-areas: 'drop-zone';
 		padding: 3rem;
+		position: relative;
 		text-align: center;
 		transition: ease-out .25s;
 		transition-property: background, border;
@@ -295,62 +409,10 @@ badge-maker {
 		}
 
 		input[type=file] {
+			align-content: center;
+			inset: 0;
 			opacity: 0;
 			position: absolute;
-		}
-	}
-}
-
-button {
-	--color: light-dark(var(--clrBack), var(--clrFront));
-	background: var(--clrAccent);
-	border: none;
-	border-radius: 0.75rem;
-	transition: box-shadow 0.5s ease-out;
-	color: var(--color);
-	contain: content;
-	cursor: pointer;
-	font: inherit;
-	padding: 0.8lh 1.2lh;
-	position: relative;
-
-	&:where(:active, :disabled) {
-		background: oklch(from var(--clrAccent) calc(l / 1.5) calc(c / 1.5) h);
-		color: oklch(from var(--color) calc(l / 1.25) calc(c / 1.25) h);
-
-		&:disabled {
-			cursor: not-allowed;
-		}
-	}
-
-	&:not(:active, :disabled) {
-
-		&::before {
-			align-self: center;
-			aspect-ratio: 1;
-			background: radial-gradient(circle, var(--clrAccent));
-			border-radius: 50%;
-			content: '';
-			inline-size: 0;
-			inset: -100%;
-			justify-self: center;
-			position: absolute;
-			z-index: -1;
-		}
-
-		&:hover {
-			background: oklch(from var(--clrAccent) calc(l / 1.1) c h);
-			box-shadow: 0 0 4rem rgb(from var(--clrFront) r g b / --light-dark(0.25, 0.5));
-
-			&::before {
-				inline-size: 110%;
-				transition: 0.5s ease;
-				transition-timing-function: cubic-bezier(0.1, 0.1, 0.1, 1);
-
-				@starting-style {
-					inline-size: 0;
-				}
-			}
 		}
 	}
 }
@@ -367,46 +429,4 @@ tool-tip {
 		calc(anchor(--tooltip end) + 1rem);
 	justify-items: center;
 	position: absolute;
-}
-
-label {
-	display: grid;
-	font-weight: 600;
-	gap: 1rem;
-
-	input:where([type=color], [type=number], [type=text]),
-	select {
-		background: light-dark(#e7ecf3, #444955);
-		border: none;
-		border-radius: 0.5rem;
-		color: light-dark(#4d6c94, #c9cfd7);
-		display: block;
-		font: inherit;
-		font-weight: 400;
-		padding: 1lh;
-
-		&::placeholder {
-			color: light-dark(#909fc3, #848a93);
-		}
-	}
-
-	select,
-	::picker(select) {
-		appearance: base-select;
-	}
-
-	input:where([type=number]),
-	select {
-		text-align: end;
-	}
-
-	input[type=color] {
-		--blockSize: 6rem;
-		--inlineSize: 26.625rem;
-		block-size: var(--blockSize);
-		clip-path:  polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%, 20% 20%);
-		inline-size: var(--inlineSize);
-		margin-block: calc(0.25rem - var(--blockSize) * 0.2);
-		margin-inline: calc(-1rem + var(--inlineSize) * -0.2);
-	}
 }
