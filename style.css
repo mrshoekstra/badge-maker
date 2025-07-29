@@ -134,6 +134,11 @@ badge-maker {
 			gap: var(--gap) calc(var(--gap) / 3 * 2);
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 
+			&[vertical] {
+				display: flex;
+				flex-direction: column;
+			}
+
 			h3 {
 				backdrop-filter: blur(1rem);
 				background: transparent;
@@ -255,7 +260,7 @@ badge-maker {
 			appearance: base-select;
 		}
 
-		input:where([type=number]),
+		input[type=number],
 		select {
 			text-align: end;
 		}
@@ -340,7 +345,7 @@ badge-maker {
 		transition: ease-out .25s;
 		transition-property: background, border;
 
-		&:where([drag-over=true]) {
+		&[drag-over=true] {
 			background: oklch(from var(--clrAccent) calc(l / 2) calc(c / 4) h);
 			border-color: var(--clrAccent);
 			border-style: solid;
