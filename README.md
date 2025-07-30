@@ -3,6 +3,9 @@
 # 🎖️ Badge Maker
 Create custom badges to showcase achievements like completed courses, trainings, and tests.
 
+> [!IMPORTANT]
+> This is not a completed project and should be considered a work in progress
+
 ## ✨ Features
 - Import/export JSON (configuration) file.
 - Add top and bottom text.
