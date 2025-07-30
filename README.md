@@ -13,6 +13,7 @@ Create custom badges to showcase achievements like completed courses, trainings,
 - Adjust the colors for the badge and icons.
 - Upload a custom center image.
 - Export as PNG.
+
 ## ⚖️ License
 Code released under the [MIT license](LICENSE.md).
 
