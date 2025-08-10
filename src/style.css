@@ -269,13 +269,11 @@ badge-maker {
 		}
 
 		input[type=color] {
-			--blockSize: 6rem;
-			--inlineSize: 26.625rem;
-			block-size: var(--blockSize);
-			clip-path:  polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%, 20% 20%);
-			inline-size: var(--inlineSize);
-			margin-block: calc(0.25rem - var(--blockSize) * 0.2);
-			margin-inline: calc(-1rem + var(--inlineSize) * -0.2);
+			block-size: 3lh;
+			box-sizing: content-box;
+			clip-path: circle(20%);
+			inline-size: 3lh;
+			margin: -1.5lh -1.5lh;
 		}
 	}
 
