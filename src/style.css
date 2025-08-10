@@ -237,10 +237,14 @@ badge-maker {
 		}
 	}
 
-	label {
+	label,
+	.label-wrapper {
 		display: grid;
-		font-weight: 600;
 		gap: 1rem;
+	}
+
+	label {
+		font-weight: 600;
 
 		input:where([type=color], [type=number], [type=text]),
 		select {
