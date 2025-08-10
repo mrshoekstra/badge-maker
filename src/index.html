@@ -30,20 +30,20 @@
 			<h2>Badge Image Configuration</h2>
 			<p>Create and customize your reward badges</p>
 		</hgroup>
-		<settings-category>
+		<settings-category data-config="t">
 			<h3>Text</h3>
-			<label>
+			<label data-config="tt">
 				Top:
 				<input type="text" id="textTopInput" maxlength="50">
 			</label>
-			<label>
+			<label data-config="tb">
 				Bottom:
 				<input type="text" id="textBottomInput" maxlength="50">
 			</label>
 		</settings-category>
-		<settings-category>
+		<settings-category data-config="i">
 			<h3>Icon</h3>
-			<label>
+			<label data-config="is">
 				Style:
 				<select id="iconStyleInput">
 					<option value="number">Number</option>
@@ -53,26 +53,26 @@
 					<option value="square">Square</option>
 				</select>
 			</label>
-			<label>
+			<label data-config="in">
 				Number:
 				<input type="number" id="iconNumberInput" min="1" max="99" step="1">
 			</label>
 		</settings-category>
-		<settings-category>
+		<settings-category data-config="c">
 			<h3>Color</h3>
-			<label>
+			<label data-config="bc">
 				Badge:
 				<input type="color" id="badgeHueInput" value="#006f8c">
 			</label>
-			<label>
+			<label data-config="ic">
 				Icon:
-				<input type="color" id="iconHueInput">
+				<input type="color" id="iconHueInput" value="#885715">
 			</label>
 		</settings-category>
-		<settings-category vertical>
+		<settings-category data-config="p">
 			<h3>Image</h3>
-			<label for="imageInput">Upload Center Image:</label>
-			<drop-zone status="init">
+			<label class="full-width" for="imageInput">Upload Center Image:</label>
+			<drop-zone class="full-width" status="init">
 				<input type="file" id="imageInput" accept="image/*">
 				<file-status type="select">
 					<p><mark>Upload a file</mark> or drag and drop</p>

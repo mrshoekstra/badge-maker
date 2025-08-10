@@ -71,6 +71,10 @@ badge-maker {
 		z-index: -2;
 	}
 
+	[data-hidden] {
+		display: none;
+	}
+
 	header {
 		align-items: center;
 		background: light-dark(#192027, #141516);
@@ -134,11 +138,6 @@ badge-maker {
 			gap: var(--gap) calc(var(--gap) / 3 * 2);
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 
-			&[vertical] {
-				display: flex;
-				flex-direction: column;
-			}
-
 			h3 {
 				backdrop-filter: blur(1rem);
 				background: transparent;
@@ -153,6 +152,10 @@ badge-maker {
 
 			#textTopInput {
 				text-transform: uppercase;
+			}
+
+			.full-width {
+				grid-column: 1 / -1;
 			}
 		}
 
@@ -351,8 +354,9 @@ badge-maker {
 			border-style: solid;
 		}
 
-		* {
-			pointer-events: none;
+		input {
+			border-radius: inherit;
+			cursor: pointer;
 		}
 
 		file-status {
@@ -371,6 +375,7 @@ badge-maker {
 				style(--statusEqType-OR-initialLoad: true): 1;
 				else: 0;
 			);
+			pointer-events: none;
 			transition: if(
 				style(--status: select): 1s ease-out;
 				else: 0.1s ease;

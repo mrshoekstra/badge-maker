@@ -1,3 +1,4 @@
+import { Config } from './modules/Config.js';
 import { DropZone } from './modules/DropZone.js';
 
 const imageInput = document.getElementById('imageInput');
@@ -48,6 +49,11 @@ function loadTemplate() {
 	});
 }
 
+function loadConfig() {
+	const config = new Config();
+	config.fromUrl();
+}
+
 function getFileName() {
 	const icon = iconStyleInput[iconStyleInput.selectedIndex].text + (
 		iconStyle === 'number'
@@ -96,10 +102,11 @@ function hexToOklchHue(hex) {
 }
 
 function updateCanvas(settings) {
+	console.log(settings);
 	return new Promise((resolve) => {
 		const thisUpdateImage = settings?.updateImage || false;
-		const thisContext = settings?.context instanceof CanvasRenderingContext2D
-			? context
+		const thisContext = settings instanceof CanvasRenderingContext2D
+			? settings
 			: canvasContext;
 		const thisCanvas = thisContext.canvas;
 		badgeHue = hexToOklchHue(badgeHueInput.value) || defaultValue.badgeHue;
@@ -219,4 +226,5 @@ textTopInput.addEventListener('input', updateCanvas);
 textBottomInput.addEventListener('input', updateCanvas);
 
 setDefaultValues();
+loadConfig();
 loadTemplate();
